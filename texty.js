@@ -1,6 +1,6 @@
-(function(win, doc, textyName) {
+(function(win, doc) {
 	// Detect browser's selection capabilities
-	var texty = win[textyName] = {
+	var texty = {
 			hasSelectionStart: 'selectionStart' in doc.createElement('textarea'),
 			hasWinGetSelection: 'getSelection' in win,
 			hasDocSelection: 'selection' in doc,
@@ -224,10 +224,12 @@
 	setTextSelection
 		Set the textarea's content and selected text
 
-		el: the textarea to use
 		opts: the texty options to define the textarea's selection
+		el: the textarea to use
 	*/
-	texty.setTextSelection = function(el, opts) {
+	texty.setTextSelection = function(opts, el) {
+		// Set the element
+		el = el || opts.element;
 		// Set the textarea's content and selected text
 		el.value = opts.contentAll;
 		el.selectionStart = opts.start;
@@ -237,23 +239,23 @@
 	getNodeSelection
 		Return a texty object representing the selection details of an element
 
-		scope: optional dom element to look in (otherwise the common ancestor of the selection points)
+		el: optional dom element to look in (otherwise the common ancestor of the selection points)
 	*/
-	texty.getNodeSelection = function(scope) {
+	texty.getNodeSelection = function(el) {
 		// Get a range object representing the current selection
 		var range = _getRange();
 		// Return false if no range object exists
 		if (!range) return false;
-		// Get the scope of the selection
-		scope = scope || _element(range.commonAncestorContainer);
+		// Get the element or nearest ancestor element of the selection
+		el = el || _element(range.commonAncestorContainer);
 		// Get the contents of the scope
-		var contentAll = scope.innerHTML;
+		var contentAll = el.innerHTML;
 		// Get the start and end indexes of a selection
-		selectionStart = _offsetFromRange(range, scope, true);
-		selectionEnd = _offsetFromRange(range, scope, false);
+		selectionStart = _offsetFromRange(range, el, true);
+		selectionEnd = _offsetFromRange(range, el, false);
 		// Return a texty object representing the selection details of an element
 		return {
-			element: scope,
+			element: el,
 			start: selectionStart,
 			end: selectionEnd,
 			length: selectionEnd - selectionStart,
@@ -267,10 +269,12 @@
 	setNodeSelection
 		Set the content and selection of an element
 
-		el: the dom element to use
 		opts: the texty options to define the selection
+		el: the dom element to use
 	*/
-	texty.setNodeSelection = function(el, opts) {
+	texty.setNodeSelection = function(opts, el) {
+		// Set the element
+		el = el || opts.element;
 		// Set the HTML of the element
 		el.innerHTML = opts.contentAll;
 		// sel: a selection object representing the range of text selected by the user
@@ -307,4 +311,6 @@
 		// Add a range to the selection.
 		sel.addRange(range);
 	};
-})(this, document, 'texty');
+
+	win.texty = texty;
+})(this, document);
