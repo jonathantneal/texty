@@ -1,13 +1,13 @@
 (function(win, doc, textyName) {
 	// Detect browser's selection capabilities
-	texty = win[textyName] = {
-		hasSelectionStart: 'selectionStart' in doc.createElement('textarea'),
-		hasWinGetSelection: 'getSelection' in win,
-		hasDocSelection: 'selection' in doc,
-		hasProperLines: !doc.documentMode
-	};
+	var texty = win[textyName] = {
+			hasSelectionStart: 'selectionStart' in doc.createElement('textarea'),
+			hasWinGetSelection: 'getSelection' in win,
+			hasDocSelection: 'selection' in doc,
+			hasProperLines: !doc.documentMode
+		},
 	// Create a document fragment for a sandbox
-	var docFrag = doc.createDocumentFragment();
+		docFrag = doc.createDocumentFragment();
 	// Fail texty if minimum requirements are not met
 	if (!texty.hasSelectionStart) return;
 	/*
