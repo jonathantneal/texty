@@ -265,7 +265,7 @@
 	};
 	/*
 	setNodeSelection
-		Set a selection on an element
+		Set the content and selection of an element
 
 		el: the dom element to use
 		opts: the texty options to define the selection
