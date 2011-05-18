@@ -178,8 +178,18 @@
 		var clone = doc.createElement(scope.nodeName),
 			rand = _randId(),
 			anchorHtml = '<a id="'+rand+'"></a>',
+			anchorProtectionRegExp = new RegExp('(<[^>]*?)('+anchorHtml+')(.*?>)', 'g'),
 			dir = atStart ? 'start' : 'end',
-			content = [opts.contentAll.substr(0,opts[dir]), anchorHtml, opts.contentAll.substr(opts[dir])].join('');
+			content = [
+				opts.contentAll.substr(0,opts[dir]),
+				anchorHtml,
+				opts.contentAll.substr(opts[dir])
+			].join('');
+		// Protect the anchor from existing within another element's brackets
+		content = (atStart)
+			? content.replace(anchorProtectionRegExp, '$1$3$2')
+			: content.replace(anchorProtectionRegExp, '$2$1$3')
+		;
 		//
 		clone.innerHTML = content;
 		//
