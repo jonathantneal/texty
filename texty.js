@@ -296,4 +296,4 @@
 		//
 		sel.addRange(range);
 	};
-})(this, document, 'textyName');
+})(this, document, 'texty');
